@@ -32,25 +32,58 @@ export function CartContextProvider({ children }) {
 
   async function addProduct(productId) {
     try {
-      const data = await cartApi.addToCart(user.id, productId)
-      // setCartProducts((prev) => [...prev, productId])
+      await cartApi.addToCart(user.id, productId)
+      setCartProducts((prev) => {
+        // Check if the product already exists in the cart
+        const productExists = prev.some((item) => item.productId === productId)
+
+        if (!productExists) {
+          // If it doesn't exist, add it to the cart
+          return [...prev, { productId, quantity: 1 }] // Assuming you also need to track quantity
+        }
+
+        // If it exists, just return the previous state
+        return prev
+      })
     } catch (error) {
       console.error('Error adding product to cart:', error)
     }
   }
 
-  async function removeProduct(productId) {
+  async function decreaseProduct(productId) {
     try {
       await cartApi.decAmount(user.id, productId)
-      // setCartProducts((prev) => {
-      //   const pos = prev.indexOf(productId)
-      //   if (pos !== -1) {
-      //     return prev.filter((value, index) => index !== pos)
-      //   }
-      //   return prev
-      // })
+      setCartProducts((prev) => {
+        const existingProduct = prev.find(
+          (item) => item.productId === productId
+        )
+
+        if (existingProduct && existingProduct.quantity > 1) {
+          // Decrease quantity if more than 1
+          return prev.map((item) =>
+            item.productId === productId
+              ? { ...item, quantity: item.quantity - 1 }
+              : item
+          )
+        } else {
+          // Remove product from cart if quantity is 1 or less
+          return prev.filter((item) => item.productId !== productId)
+        }
+      })
     } catch (error) {
       console.error('Error removing product from cart:', error)
+    }
+  }
+
+  async function removeFromCart(productId) {
+    try {
+      await cartApi.removeFromCart(user.id, productId)
+      setCartProducts((prev) => {
+        // Remove product from cart regardless of its quantity
+        return prev.filter((item) => item.productId !== productId)
+      })
+    } catch (error) {
+      console.error('Cannot remove product from cart')
     }
   }
 
@@ -72,7 +105,8 @@ export function CartContextProvider({ children }) {
         cartProducts,
         setCartProducts,
         addProduct,
-        removeProduct,
+        decreaseProduct,
+        removeFromCart,
         clearCart,
       }}
     >

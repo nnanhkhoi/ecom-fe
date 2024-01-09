@@ -17,7 +17,6 @@ import { useSelector } from 'react-redux'
 
 const ColsWrapper = styled.div`
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
   gap: 40px;
   margin: 40px 0;
   p {
@@ -34,6 +33,11 @@ const WishedProductsGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px;
+`
+
+const ItemsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
 `
 
 export default function AccountPage() {
@@ -95,16 +99,17 @@ export default function AccountPage() {
               {activeTab === 'Orders' && (
                 <>
                   {!orderLoaded && <p>Loading</p>}
-
-                  {orderLoaded && (
-                    <div>
-                      {orders.length === 0 && <p>Order empty</p>}
-                      {orders.length > 0 &&
-                        orders.map((o, index) => (
-                          <SingleOrder {...o} key={index} />
-                        ))}
-                    </div>
-                  )}
+                  <ItemsContainer>
+                    {orderLoaded && (
+                      <div>
+                        {orders.length === 0 && <p>Order empty</p>}
+                        {orders.length > 0 &&
+                          orders.map((o, index) => (
+                            <SingleOrder {...o} key={index} />
+                          ))}
+                      </div>
+                    )}
+                  </ItemsContainer>
                 </>
               )}
               {activeTab === 'Wishlist' && (
@@ -136,7 +141,7 @@ export default function AccountPage() {
               )}
             </WhiteBox>
           </div>
-          <div>
+          {/* <div>
             <WhiteBox>
               {addressLoaded && (
                 <>
@@ -191,7 +196,7 @@ export default function AccountPage() {
                 </>
               )}
             </WhiteBox>
-          </div>
+          </div>*/}
         </ColsWrapper>
       </Center>
     </>

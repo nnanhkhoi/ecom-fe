@@ -85,7 +85,8 @@ const QuantityLabel = styled.span`
 // `
 
 export default function CartPage() {
-  const { cartProducts, addProduct, removeProduct } = useContext(CartContext)
+  const { cartProducts, addProduct, decreaseProduct, removeFromCart } =
+    useContext(CartContext)
   const user = useSelector((state) => state.auth.login.currentUser)
 
   const navigate = useNavigate()
@@ -102,6 +103,11 @@ export default function CartPage() {
       setLoading(false)
     })
   }, [])
+
+  // useEffect to listen for changes in cartProducts
+  useEffect(() => {
+    setProducts(cartProducts)
+  }, [cartProducts])
 
   // useEffect(() => {
   //   if (typeof window === 'undefined') {
@@ -132,10 +138,40 @@ export default function CartPage() {
 
   function moreOfThisProduct(id) {
     addProduct(id)
+    // Update products state immediately
+    const updatedProducts = products.map((product) => {
+      if (product.productId === id) {
+        return { ...product, quantity: product.quantity + 1 }
+      }
+      return product
+    })
+    setProducts(updatedProducts)
   }
 
   function lessOfThisProduct(id) {
-    removeProduct(id)
+    decreaseProduct(id)
+    // Update products state immediately
+    const updatedProducts = products.map((product) => {
+      if (product.productId === id) {
+        return { ...product, quantity: Math.max(0, product.quantity - 1) }
+      }
+      return product
+    })
+    setProducts(updatedProducts)
+  }
+
+  const deleteFromCart = (id) => {
+    removeFromCart(id)
+
+    // Update product state
+
+    const updatedProducts = products.map((product) => {
+      if (product.productId === id) {
+        return { ...product, quantity: 0 }
+      }
+      return product
+    })
+    setProducts(updatedProducts)
   }
 
   let productsTotal = 0
@@ -199,7 +235,10 @@ export default function CartPage() {
                       </td>
                       <td>${product.quantity * product.price}</td>
                       <td>
-                        <Button white="true">
+                        <Button
+                          white="true"
+                          onClick={() => deleteFromCart(product.productId)}
+                        >
                           <HighlightOffOutlinedIcon sx={{ color: '#ff5722' }} />
                         </Button>
                       </td>

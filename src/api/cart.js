@@ -30,6 +30,7 @@ const decAmount = async (userId, productId) => {
   const response = await axiosApiInstance.post(
     baseUrl,
     {
+      userId,
       productId,
       quantity: -1,
     },
@@ -42,8 +43,9 @@ const decAmount = async (userId, productId) => {
 }
 
 const removeFromCart = async (userId, productId) => {
-  const response = await axiosApiInstance.delete(`${baseUrl}/${productId}`, {
+  const response = await axiosApiInstance.delete(baseUrl, {
     headers: { 'x-client-id': userId },
+    data: { userId, productId },
   })
   return response.data
 }
