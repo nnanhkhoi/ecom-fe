@@ -15,13 +15,13 @@ const StyledProductsGrid = styled.div`
 
 export default function ProductsGrid({ products, wishedProducts = [] }) {
   return (
-    <StyledProductsGrid interval={100}>
+    <StyledProductsGrid $interval={100}>
       {products?.length > 0 &&
         products.map((product, index) => (
           <ProductBox
             key={index}
             {...product}
-            wished={wishedProducts.includes(product._id)}
+            $wished={wishedProducts.includes(product._id)}
           />
         ))}
     </StyledProductsGrid>

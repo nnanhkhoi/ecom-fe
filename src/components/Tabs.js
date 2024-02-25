@@ -9,14 +9,14 @@ const StyledTab = styled.span`
   font-size: 1.5rem;
   cursor: pointer;
   ${(props) =>
-    props.active
+    props.$active
       ? `
-    color:black;
-    border-bottom: 2px solid black;
-  `
+      color: black;
+      border-bottom: 2px solid black;
+    `
       : `
-    color:#999;
-  `}
+      color: #999;
+    `}
 `
 
 export default function Tabs({ tabs, active, onChange }) {
@@ -27,7 +27,7 @@ export default function Tabs({ tabs, active, onChange }) {
           onClick={() => {
             onChange(tabName)
           }}
-          active={tabName === active ? 'true' : ''}
+          $active={tabName === active}
           key={index}
         >
           {tabName}

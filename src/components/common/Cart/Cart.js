@@ -79,11 +79,6 @@ const QuantityLabel = styled.span`
   }
 `
 
-// const CityHolder = styled.div`
-//   display: flex;
-//   gap: 5px;
-// `
-
 export default function CartPage() {
   const { cartProducts, addProduct, decreaseProduct, removeFromCart } =
     useContext(CartContext)
@@ -94,47 +89,12 @@ export default function CartPage() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
 
-  // const [isSuccess, setIsSuccess] = useState(false)
-  // const [shippingFee, setShippingFee] = useState(null)
-
   useEffect(() => {
     cartApi.fetchCartItems(user.id).then((response) => {
       setProducts(response.metadata)
       setLoading(false)
     })
   }, [])
-
-  // useEffect to listen for changes in cartProducts
-  useEffect(() => {
-    setProducts(cartProducts)
-  }, [cartProducts])
-
-  // useEffect(() => {
-  //   if (typeof window === 'undefined') {
-  //     return
-  //   }
-  //   if (window?.location.href.includes('success')) {
-  //     setIsSuccess(true)
-  //     clearCart()
-  //   }
-  //   axios.get('/api/settings?name=shippingFee').then((res) => {
-  //     setShippingFee(res.data.value)
-  //   })
-  // }, [])
-
-  // useEffect(() => {
-  //   // if (!session) {
-  //   //   return
-  //   // }
-  //   axios.get('/api/address').then((response) => {
-  //     setName(response.data.name)
-  //     setEmail(response.data.email)
-  //     setCity(response.data.city)
-  //     setPostalCode(response.data.postalCode)
-  //     setStreetAddress(response.data.streetAddress)
-  //     setCountry(response.data.country)
-  //   })
-  // }, [])
 
   function moreOfThisProduct(id) {
     addProduct(id)
@@ -163,14 +123,10 @@ export default function CartPage() {
   const deleteFromCart = (id) => {
     removeFromCart(id)
 
-    // Update product state
-
-    const updatedProducts = products.map((product) => {
-      if (product.productId === id) {
-        return { ...product, quantity: 0 }
-      }
-      return product
-    })
+    // Filter out the deleted product instead of setting its quantity to 0
+    const updatedProducts = products.filter(
+      (product) => product.productId !== id
+    )
     setProducts(updatedProducts)
   }
 
@@ -220,14 +176,14 @@ export default function CartPage() {
                       <td>{product.price}</td>
                       <td>
                         <Button
-                          white="true"
+                          $white="true"
                           onClick={() => lessOfThisProduct(product.productId)}
                         >
                           -
                         </Button>
                         <QuantityLabel>{product.quantity}</QuantityLabel>
                         <Button
-                          white="true"
+                          $white="true"
                           onClick={() => moreOfThisProduct(product.productId)}
                         >
                           +
@@ -236,7 +192,7 @@ export default function CartPage() {
                       <td>${product.quantity * product.price}</td>
                       <td>
                         <Button
-                          white="true"
+                          $white="true"
                           onClick={() => deleteFromCart(product.productId)}
                         >
                           <HighlightOffOutlinedIcon sx={{ color: '#ff5722' }} />
@@ -274,8 +230,8 @@ export default function CartPage() {
                 </tbody>
               </Table>
               <Button
-                black="true"
-                block="true"
+                $black="true"
+                $block="true"
                 onClick={() => navigate('/checkout')}
               >
                 Continue to payment

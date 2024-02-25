@@ -20,7 +20,6 @@ function Navbar() {
   // const [click, setClick] = useState(false)
   const user = useSelector((state) => state.auth.login.currentUser)
   const [button, setButton] = useState(true)
-  const [products, setProducts] = useState([])
   const [menus, setMenus] = useState([])
   const { cartProducts } = useContext(CartContext)
   const dispatch = useDispatch()
@@ -30,14 +29,6 @@ function Navbar() {
   // const closeMobileMenu = () => setClick(false)
 
   useEffect(() => {
-    // if (cartProducts.length > 0) {
-    //   cartApi.fetchCartItems(user.id).then((response) => {
-    //     setProducts(response)
-    //   })
-    // } else {
-    //   setProducts([])
-    // }
-
     // Call the function
     getCategoryMenu()
       .then((categories) => {

@@ -63,7 +63,7 @@ export default function FlyingButton(props) {
   return (
     <>
       <FlyingButtonWrapper
-        white={props.white}
+        $white={props.white}
         main={props.main}
         onClick={() => addProduct(props._id)}
       >

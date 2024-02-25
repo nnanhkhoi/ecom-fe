@@ -13,7 +13,6 @@ import storage from 'redux-persist/lib/storage'
 
 import userReducer from './reducers/userReducer'
 import usersReducer from './reducers/usersReducer'
-import cartReducer from './reducers/cartReducer'
 import productReducer from './reducers/productReducer'
 import authReducer from './authSlice'
 
@@ -27,7 +26,6 @@ const rootReducer = combineReducers({
   auth: authReducer,
   user: userReducer,
   users: usersReducer,
-  cart: cartReducer,
   product: productReducer,
 })
 

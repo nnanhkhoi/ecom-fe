@@ -22,6 +22,7 @@ export function CartContextProvider({ children }) {
     async function fetchCartItems() {
       if (user) {
         const items = await cartApi.fetchCartItems(user.id)
+        console.log(items.metadata)
         setCartProducts(items.metadata)
       }
     }
@@ -43,7 +44,14 @@ export function CartContextProvider({ children }) {
         }
 
         // If it exists, just return the previous state
-        return prev
+        else {
+          // Decrease quantity if more than 1
+          return prev.map((item) =>
+            item.productId === productId
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          )
+        }
       })
     } catch (error) {
       console.error('Error adding product to cart:', error)
